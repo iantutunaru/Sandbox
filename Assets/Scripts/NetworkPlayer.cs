@@ -19,8 +19,15 @@ public class NetworkPlayer : MonoBehaviour
     [SerializeField]
     float rotationSpeed;
 
+    public bool isSprinting;
+
+    [Header("Movement Speeds")]
     [SerializeField]
-    float movementSpeed;
+    float walkingSpeed;
+    [SerializeField]
+    float runningSpeed;
+    [SerializeField]
+    float sprintingSpeed;
 
     [SerializeField]
     float jumpSpeed;
@@ -87,7 +94,21 @@ public class NetworkPlayer : MonoBehaviour
         moveDirection = moveDirection + cameraObject.right * inputManager.horizontalInput;
         moveDirection.Normalize();
         moveDirection.y = 0;
-        moveDirection = moveDirection * movementSpeed;
+
+        if (isSprinting)
+        {
+            moveDirection = moveDirection * sprintingSpeed;
+        } else
+        {
+            if (inputManager.moveAmount >= 0.5f)
+            {
+                moveDirection = moveDirection * runningSpeed;
+            }
+            else
+            {
+                moveDirection = moveDirection * walkingSpeed;
+            }
+        }
 
         Vector3 movementVelocity = moveDirection;
         playerRigidbody.velocity = movementVelocity;
