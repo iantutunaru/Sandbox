@@ -8,6 +8,8 @@ using UnityEngine.Windows;
 public class NetworkPlayer : MonoBehaviour
 {
     [SerializeField]
+    Transform footPosition;
+    [SerializeField]
     Rigidbody playerRigidbody;
 
     [SerializeField]
@@ -19,7 +21,16 @@ public class NetworkPlayer : MonoBehaviour
     [SerializeField]
     float rotationSpeed;
 
+    [Header("Falling")]
+    public float inAirTimer;
+    public float leapingVelocity;
+    public float fallingVelocity;
+    public float rayCastHeightOffSet = 0.5f;
+    public LayerMask groundLayer;
+
+    [Header("Movement Flags")]
     public bool isSprinting;
+    public bool isGrounded;
 
     [Header("Movement Speeds")]
     [SerializeField]
@@ -44,8 +55,8 @@ public class NetworkPlayer : MonoBehaviour
     float maxSpeed;
 
     // States
-    bool isGrounded = false;
-    bool isAttacking = false;
+    //bool isGrounded = false;
+    //bool isAttacking = false;
 
     // Raycasts
     RaycastHit[] raycastHits = new RaycastHit[10];
@@ -65,6 +76,8 @@ public class NetworkPlayer : MonoBehaviour
     private InputAction look;
 
     InputManager inputManager;
+    AnimatorManager animatorManager;
+    PlayerManager playerManager;
 
     Vector3 moveDirection;
     Transform cameraObject;
@@ -74,6 +87,8 @@ public class NetworkPlayer : MonoBehaviour
 
     private void Awake()
     {
+        playerManager = GetComponent<PlayerManager>();
+        animatorManager = GetComponent<AnimatorManager>();
         playerControls = new PlayerInputActions();
         syncPhysicsObjects = GetComponentsInChildren<SyncPhysicsObject>();
         SetRagdollParts();
@@ -84,6 +99,13 @@ public class NetworkPlayer : MonoBehaviour
 
     public void HandleAllMovement()
     {
+        HandleFallingAndLanding();
+
+        if (playerManager.isInteracting)
+        {
+            return;
+        }
+
         HandleMovement();
         HandleRotation();
     }
@@ -132,6 +154,45 @@ public class NetworkPlayer : MonoBehaviour
         Quaternion playerRotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
 
         transform.rotation = playerRotation;
+    }
+
+    private void HandleFallingAndLanding()
+    {
+        RaycastHit hit;
+        Vector3 rayCastOrigin = footPosition.position;
+        rayCastOrigin.y = rayCastOrigin.y + rayCastHeightOffSet;
+
+        if (!isGrounded)
+        {
+            Debug.Log("In air");
+            if (!playerManager.isInteracting)
+            {
+                Debug.Log("Falling 1");
+                animatorManager.PlayTargetAnimation("Falling", true);
+            }
+
+            Debug.Log("Falling 2");
+            inAirTimer = inAirTimer + Time.deltaTime;
+            playerRigidbody.AddForce(transform.forward * leapingVelocity);
+            playerRigidbody.AddForce(-Vector3.up * fallingVelocity * inAirTimer);
+        }
+
+        if (Physics.SphereCast(rayCastOrigin, 0.2f, Vector3.down, out hit, 0.5f, groundLayer))
+        {
+            Debug.Log("Raycast hit");
+            if (!isGrounded && playerManager.isInteracting)
+            {
+                animatorManager.PlayTargetAnimation("Landing", true);
+            }
+
+            inAirTimer = 0;
+            isGrounded = true;
+            playerManager.isInteracting = false;
+        }
+        else
+        {
+            isGrounded = false;
+        }
     }
 
     private void OnEnable()
@@ -289,7 +350,7 @@ public class NetworkPlayer : MonoBehaviour
     {
         if (ragdollParts.Contains(other))
         {
-            Debug.Log("Touched itself");
+            //Debug.Log("Touched itself");
             return;
         }
 

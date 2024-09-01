@@ -4,9 +4,13 @@ using UnityEngine;
 
 public class PlayerManager : MonoBehaviour
 {
+    [SerializeField]
+    Animator animator;
     InputManager inputManager;
     CameraManager cameraManager;
     NetworkPlayer playerLocomotion;
+
+    public bool isInteracting;
 
     private void Awake()
     {
@@ -28,5 +32,7 @@ public class PlayerManager : MonoBehaviour
     private void LateUpdate()
     {
         cameraManager.HandleAllCameraMovement();
+
+        isInteracting = animator.GetBool("isInteracting");
     }
 }
