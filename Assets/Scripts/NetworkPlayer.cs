@@ -31,6 +31,7 @@ public class NetworkPlayer : MonoBehaviour
     [Header("Movement Flags")]
     public bool isSprinting;
     public bool isGrounded;
+    public bool isJumping;
 
     [Header("Movement Speeds")]
     [SerializeField]
@@ -39,6 +40,10 @@ public class NetworkPlayer : MonoBehaviour
     float runningSpeed;
     [SerializeField]
     float sprintingSpeed;
+
+    [Header("Jumping Speeds")]
+    public float jumpHeight = 3;
+    public float gravityIntensity = -15;
 
     [SerializeField]
     float jumpSpeed;
@@ -112,6 +117,11 @@ public class NetworkPlayer : MonoBehaviour
 
     private void HandleMovement()
     {
+        if (isJumping)
+        {
+            return;
+        }
+
         moveDirection = cameraObject.forward * inputManager.verticalInput;
         moveDirection = moveDirection + cameraObject.right * inputManager.horizontalInput;
         moveDirection.Normalize();
@@ -138,6 +148,11 @@ public class NetworkPlayer : MonoBehaviour
 
     private void HandleRotation()
     {
+        if (isJumping) 
+        { 
+            return; 
+        }
+
         Vector3 targetDirection = Vector3.zero;
 
         targetDirection = cameraObject.forward * inputManager.verticalInput;
@@ -162,7 +177,7 @@ public class NetworkPlayer : MonoBehaviour
         Vector3 rayCastOrigin = footPosition.position;
         rayCastOrigin.y = rayCastOrigin.y + rayCastHeightOffSet;
 
-        if (!isGrounded)
+        if (!isGrounded && !isJumping)
         {
             Debug.Log("In air");
             if (!playerManager.isInteracting)
@@ -192,6 +207,20 @@ public class NetworkPlayer : MonoBehaviour
         else
         {
             isGrounded = false;
+        }
+    }
+
+    public void HandleJumping()
+    {
+        if (isGrounded)
+        {
+            animatorManager.animator.SetBool("isJumping", true);
+            animatorManager.PlayTargetAnimation("Jump", false);
+
+            float jumpingVelocity = Mathf.Sqrt(-2 * gravityIntensity * jumpHeight);
+            Vector3 playerVelocity = moveDirection;
+            playerVelocity.y = jumpingVelocity;
+            playerRigidbody.velocity = playerVelocity;
         }
     }
 
