@@ -21,12 +21,18 @@ public class NetworkPlayer : MonoBehaviour
     [SerializeField]
     float rotationSpeed;
 
+    [Header("Movement")]
+    [SerializeField]
+    Transform rigidbodyTransform;
+
     [Header("Falling")]
     public float inAirTimer;
     public float leapingVelocity;
     public float fallingVelocity;
     public float rayCastHeightOffSet = 0.5f;
     public LayerMask groundLayer;
+    public float maxDistance;
+    public float fallingSpeed;
 
     [Header("Movement Flags")]
     public bool isSprinting;
@@ -85,10 +91,13 @@ public class NetworkPlayer : MonoBehaviour
     PlayerManager playerManager;
 
     Vector3 moveDirection;
+    Vector3 playerVelocity;
     Transform cameraObject;
 
     [SerializeField]
     Camera cam;
+
+    bool jumpInProgress = false;
 
     private void Awake()
     {
@@ -106,10 +115,10 @@ public class NetworkPlayer : MonoBehaviour
     {
         HandleFallingAndLanding();
 
-        if (playerManager.isInteracting)
-        {
-            return;
-        }
+        //if (playerManager.isInteracting)
+        //{
+        //    return;
+        //}
 
         HandleMovement();
         HandleRotation();
@@ -117,10 +126,10 @@ public class NetworkPlayer : MonoBehaviour
 
     private void HandleMovement()
     {
-        if (isJumping)
-        {
-            return;
-        }
+        //if (isJumping)
+        //{
+        //    return;
+        //}
 
         moveDirection = cameraObject.forward * inputManager.verticalInput;
         moveDirection = moveDirection + cameraObject.right * inputManager.horizontalInput;
@@ -130,7 +139,11 @@ public class NetworkPlayer : MonoBehaviour
         if (isSprinting)
         {
             moveDirection = moveDirection * sprintingSpeed;
-        } else
+        } else if (!isGrounded)
+        {
+            moveDirection = moveDirection * fallingSpeed;
+        }
+        else
         {
             if (inputManager.moveAmount >= 0.5f)
             {
@@ -142,16 +155,35 @@ public class NetworkPlayer : MonoBehaviour
             }
         }
 
-        Vector3 movementVelocity = moveDirection;
-        playerRigidbody.velocity = movementVelocity;
+        if (isJumping && jumpInProgress == false)
+        {
+            jumpInProgress = true; 
+            float jumpingVelocity = Mathf.Sqrt(-2 * gravityIntensity * jumpHeight);
+            Debug.Log("************Jumping y:" + jumpingVelocity);
+            moveDirection.y = jumpingVelocity;
+            //playerRigidbody.velocity = moveDirection;
+            playerRigidbody.AddForce(moveDirection);
+
+            //return;
+        } else
+        {
+            Vector3 movementVelocity = moveDirection;
+            Debug.Log("Movement y: " + movementVelocity.y);
+            //playerRigidbody.velocity = movementVelocity;
+            playerRigidbody.AddForce(movementVelocity);
+        }
+
+        //Vector3 movementVelocity = moveDirection;
+        //Debug.Log("Movement y: " + movementVelocity.y);
+        //playerRigidbody.velocity = movementVelocity;
     }
 
     private void HandleRotation()
     {
-        if (isJumping) 
-        { 
-            return; 
-        }
+        //if (isJumping) 
+        //{ 
+        //    return; 
+        //}
 
         Vector3 targetDirection = Vector3.zero;
 
@@ -174,8 +206,10 @@ public class NetworkPlayer : MonoBehaviour
     private void HandleFallingAndLanding()
     {
         RaycastHit hit;
-        Vector3 rayCastOrigin = footPosition.position;
+        Vector3 rayCastOrigin = transform.position;
+        Vector3 targetPosition;
         rayCastOrigin.y = rayCastOrigin.y + rayCastHeightOffSet;
+        targetPosition = transform.position;
 
         if (!isGrounded && !isJumping)
         {
@@ -192,35 +226,62 @@ public class NetworkPlayer : MonoBehaviour
             playerRigidbody.AddForce(-Vector3.up * fallingVelocity * inAirTimer);
         }
 
-        if (Physics.SphereCast(rayCastOrigin, 0.2f, Vector3.down, out hit, 0.5f, groundLayer))
+
+        if (Physics.SphereCast(rayCastOrigin, 0.2f, Vector3.down, out hit, maxDistance, groundLayer))
         {
             Debug.Log("Raycast hit");
             if (!isGrounded && playerManager.isInteracting)
             {
+                //animatorManager.animator.StopPlayback();
+                //animatorManager.animator.SetBool("isJumping", false);
+                //isJumping = false;
+                //jumpInProgress = false;
                 animatorManager.PlayTargetAnimation("Landing", true);
-            }
+            } 
 
+            Vector3 rayCastHitPoint = hit.point;
+            Debug.Log("Raycast y = " + rayCastHitPoint.y);
+            targetPosition.y = rayCastHitPoint.y;
             inAirTimer = 0;
             isGrounded = true;
-            playerManager.isInteracting = false;
+
+            //playerManager.isInteracting = false;
         }
         else
         {
             isGrounded = false;
         }
+
+        if (isGrounded && !isJumping)
+        {
+            if (playerManager.isInteracting || inputManager.moveAmount > 0) 
+            {
+                Debug.Log("Moving up while walking or interacting");
+                //transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime / 0.1f);
+
+            } else
+            {
+                Debug.Log("Moving up while standing");
+                //transform.position = targetPosition;
+            }
+        }
     }
 
     public void HandleJumping()
     {
+        Debug.Log("JUMPING");
         if (isGrounded)
         {
             animatorManager.animator.SetBool("isJumping", true);
             animatorManager.PlayTargetAnimation("Jump", false);
+            playerRigidbody.AddForce(transform.up * jumpHeight, ForceMode.Impulse);
 
-            float jumpingVelocity = Mathf.Sqrt(-2 * gravityIntensity * jumpHeight);
-            Vector3 playerVelocity = moveDirection;
-            playerVelocity.y = jumpingVelocity;
-            playerRigidbody.velocity = playerVelocity;
+            float jumpingvelocity = Mathf.Sqrt(-2 * gravityIntensity * jumpHeight);
+            playerVelocity = moveDirection;
+            Debug.Log("************jumping y:" + jumpingvelocity);
+            playerVelocity.y = jumpingvelocity;
+            //playerrigidbody.velocity = playervelocity;
+            playerRigidbody.AddForce(playerVelocity);
         }
     }
 
