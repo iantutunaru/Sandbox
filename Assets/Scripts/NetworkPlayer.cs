@@ -169,7 +169,7 @@ public class NetworkPlayer : MonoBehaviour
         {
             jumpInProgress = true; 
             float jumpingVelocity = Mathf.Sqrt(-2 * gravityIntensity * jumpHeight);
-            Debug.Log("************Jumping y:" + jumpingVelocity);
+            //Debug.Log("************Jumping y:" + jumpingVelocity);
             moveDirection.y = jumpingVelocity;
             //playerRigidbody.velocity = moveDirection;
             playerRigidbody.AddForce(moveDirection);
@@ -178,7 +178,7 @@ public class NetworkPlayer : MonoBehaviour
         } else
         {
             Vector3 movementVelocity = moveDirection;
-            Debug.Log("Movement y: " + movementVelocity.y);
+            //Debug.Log("Movement y: " + movementVelocity.y);
             //playerRigidbody.velocity = movementVelocity;
             playerRigidbody.AddForce(movementVelocity);
         }
@@ -223,14 +223,14 @@ public class NetworkPlayer : MonoBehaviour
 
         if (!isGrounded && !isJumping)
         {
-            Debug.Log("In air");
+            //Debug.Log("In air");
             if (!playerManager.isInteracting)
             {
-                Debug.Log("Falling 1");
+                //Debug.Log("Falling 1");
                 animatorManager.PlayTargetAnimation("Falling", true);
             }
 
-            Debug.Log("Falling 2");
+            //Debug.Log("Falling 2");
             inAirTimer = inAirTimer + Time.deltaTime;
             playerRigidbody.AddForce(transform.forward * leapingVelocity);
             playerRigidbody.AddForce(-Vector3.up * fallingVelocity * inAirTimer);
@@ -238,7 +238,7 @@ public class NetworkPlayer : MonoBehaviour
 
         if (Physics.SphereCast(rayCastOrigin, 0.2f, Vector3.down, out hit, maxDistance, groundLayer))
         {
-            Debug.Log("Raycast hit");
+            //Debug.Log("Raycast hit");
             if (!isGrounded && playerManager.isInteracting)
             {
                 //animatorManager.animator.StopPlayback();
@@ -249,7 +249,7 @@ public class NetworkPlayer : MonoBehaviour
             } 
 
             Vector3 rayCastHitPoint = hit.point;
-            Debug.Log("Raycast y = " + rayCastHitPoint.y);
+            //Debug.Log("Raycast y = " + rayCastHitPoint.y);
             targetPosition.y = rayCastHitPoint.y;
             inAirTimer = 0;
             isGrounded = true;
@@ -264,7 +264,7 @@ public class NetworkPlayer : MonoBehaviour
 
     public void HandleJumping()
     {
-        Debug.Log("JUMPING");
+        //Debug.Log("JUMPING");
         if (isGrounded)
         {
             animatorManager.animator.SetBool("isJumping", true);
@@ -273,7 +273,7 @@ public class NetworkPlayer : MonoBehaviour
 
             float jumpingvelocity = Mathf.Sqrt(-2 * gravityIntensity * jumpHeight);
             playerVelocity = moveDirection;
-            Debug.Log("************jumping y:" + jumpingvelocity);
+            //Debug.Log("************jumping y:" + jumpingvelocity);
             playerVelocity.y = jumpingvelocity;
             //playerrigidbody.velocity = playervelocity;
             playerRigidbody.AddForce(playerVelocity);
@@ -282,7 +282,7 @@ public class NetworkPlayer : MonoBehaviour
 
     public void HandleAttacking()
     {
-        Debug.Log("ATTACKING");
+        //Debug.Log("ATTACKING");
         isAttacking = true;
         animatorManager.animator.SetBool("isAttacking", true);
         animatorManager.PlayTargetAnimation("Attack", false);
@@ -290,7 +290,7 @@ public class NetworkPlayer : MonoBehaviour
 
     public void HandleHeavyAttacking()
     {
-        Debug.Log("HEAVY ATTACK");
+        //Debug.Log("HEAVY ATTACK");
         isHeavyAttacking = true;
         animatorManager.animator.SetBool("isHeavyAttacking", true);
         animatorManager.PlayTargetAnimation("HeavyAttack", false);
