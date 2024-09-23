@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
+using UnityEngine.Accessibility;
 using UnityEngine.InputSystem;
 using UnityEngine.Windows;
 
@@ -94,6 +95,7 @@ public class NetworkPlayer : MonoBehaviour
 
     Vector3 moveDirection;
     Vector3 playerVelocity;
+    [SerializeField]
     Transform cameraObject;
     [SerializeField]
     private Transform animatedAvatarTransform;
@@ -105,6 +107,14 @@ public class NetworkPlayer : MonoBehaviour
     [SerializeField]
     Camera cam;
 
+    [SerializeField]
+    ConfigurableJoint hips;
+
+    private ConfigurableJoint[] joints;
+    private ConfigurableJoint[] jointsBackup;
+
+    private JointDrive[] jointDriveBackup;
+
 
     bool jumpInProgress = false;
 
@@ -115,9 +125,11 @@ public class NetworkPlayer : MonoBehaviour
         playerControls = new PlayerInputActions();
         syncPhysicsObjects = GetComponentsInChildren<SyncPhysicsObject>();
         SetRagdollParts();
+        joints = this.gameObject.GetComponentsInChildren<ConfigurableJoint>();
+        jointsBackup = new ConfigurableJoint[joints.Length];
 
         inputManager = GetComponent<InputManager>();
-        cameraObject = Camera.main.transform;
+        //cameraObject = Camera.main.transform;
         //playerCollider = GetComponent<Collider>();
     }
 
@@ -353,5 +365,58 @@ public class NetworkPlayer : MonoBehaviour
                 ragdollParts.Add(collider);
             }
         }
+    }
+
+    public void Death()
+    {
+        jointDriveBackup = new JointDrive[joints.Length];
+        //joints.CopyTo(jointsBackup, 0);
+
+        for (int i = 0; i < joints.Length; i++)
+        {
+            Debug.Log("Saving joint " + i);
+            
+
+            //jointsBackup[i] = joints[i];
+           
+            //jointsBackup[i].slerpDrive = joints[i].slerpDrive;
+            //Debug.Log("Saved joint slerp drive: " + jointsBackup[i].slerpDrive.positionSpring);
+        }
+
+        JointDrive newDrive = new JointDrive();
+        newDrive.positionSpring = 0;
+
+        //hips.xMotion = ConfigurableJointMotion.Free;
+        //hips.yMotion = ConfigurableJointMotion.Free;
+        hips.zMotion = ConfigurableJointMotion.Free;
+
+        for (int i = 0; i < joints.Length; i++)
+        {
+            jointDriveBackup[i] = joints[i].slerpDrive;
+            joints[i].slerpDrive = newDrive;
+        }
+
+        for (int i = 0; i < joints.Length; i++)
+        {
+            Debug.Log("II. Saving joint " + i);
+            //Debug.Log("II. Saved joint slerp drive: " + jointsBackup[i].slerpDrive.positionSpring);
+        }
+    }
+
+    public void Respawn()
+    {
+        //jointsBackup.CopyTo(joints, 0);
+        hips.zMotion = ConfigurableJointMotion.Locked;
+        for (int i = 0; i < joints.Length; i++)
+        {
+            joints[i].slerpDrive = jointDriveBackup[i];
+            Debug.Log("III. Loading joint " + i);
+            //joints[i] = jointsBackup[i];
+            //Debug.Log("III. Loaded joint backup slerp drive: " + jointsBackup[i].slerpDrive.positionSpring);
+            //joints[i].slerpDrive = jointsBackup[i].slerpDrive;
+            //Debug.Log("III. Loaded joint slerp drive: " + joints[i].slerpDrive.positionSpring);
+        }
+
+        Debug.Log("Respawned");
     }
 }

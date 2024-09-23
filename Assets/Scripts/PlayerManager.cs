@@ -7,10 +7,12 @@ public class PlayerManager : MonoBehaviour
     [SerializeField]
     Animator animator;
     InputManager inputManager;
+    [SerializeField]
     CameraManager cameraManager;
     NetworkPlayer playerLocomotion;
 
     public bool isInteracting;
+    public bool isDead = false;
 
     private void Awake()
     {
@@ -21,7 +23,10 @@ public class PlayerManager : MonoBehaviour
 
     private void Update()
     {
-        inputManager.HandleAllInputs();
+        if (!isDead)
+        {
+            inputManager.HandleAllInputs();
+        }
     }
 
     private void FixedUpdate()

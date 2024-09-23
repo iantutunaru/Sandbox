@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class InputManager : MonoBehaviour
 {
@@ -19,10 +20,10 @@ public class InputManager : MonoBehaviour
     public float verticalInput;
     public float horizontalInput;
 
-    public bool sprint_Input;
-    public bool jump_Input;
-    public bool attack_Input;
-    public bool heavyAttack_input;
+    public bool sprint_Input = false;
+    public bool jump_Input = false;
+    public bool attack_Input = false;
+    public bool heavyAttack_input = false;
 
     private void Awake()
     {
@@ -32,26 +33,63 @@ public class InputManager : MonoBehaviour
 
     private void OnEnable()
     {
-        if (playerControls ==  null)
+        //if (playerControls ==  null)
+        //{
+        //    Debug.Log("New player joined");
+        //    playerControls = new PlayerInputActions();
+
+        //    playerControls.Player.Move.performed += i => movementInput = i.ReadValue<Vector2>();
+        //    playerControls.Player.Look.performed += i => cameraInput = i.ReadValue<Vector2>();
+
+        //    playerControls.Player.Sprint.performed += i => sprint_Input = true;
+        //    playerControls.Player.Sprint.canceled += i => sprint_Input = false;
+        //    playerControls.Player.Jump.performed += i => jump_Input = true;
+        //    playerControls.Player.Attack.performed += i => attack_Input = true;
+        //    playerControls.Player.HeavyAttack.performed += i => heavyAttack_input = true;
+        //}
+
+        //playerControls.Enable();
+    }
+
+    public void OnMove(InputAction.CallbackContext context)
+    {
+        movementInput = context.ReadValue<Vector2>();
+    }
+
+    public void Look(InputAction.CallbackContext context)
+    {
+        cameraInput = context.ReadValue<Vector2>();
+    }
+
+    public void Jump (InputAction.CallbackContext context)
+    {
+        jump_Input = true;
+    }
+
+    public void Sprint(InputAction.CallbackContext context)
+    {
+        if (sprint_Input)
         {
-            playerControls = new PlayerInputActions();
-
-            playerControls.Player.Move.performed += i => movementInput = i.ReadValue<Vector2>();
-            playerControls.Player.Look.performed += i => cameraInput = i.ReadValue<Vector2>();
-
-            playerControls.Player.Sprint.performed += i => sprint_Input = true;
-            playerControls.Player.Sprint.canceled += i => sprint_Input = false;
-            playerControls.Player.Jump.performed += i => jump_Input = true;
-            playerControls.Player.Attack.performed += i => attack_Input = true;
-            playerControls.Player.HeavyAttack.performed += i => heavyAttack_input = true;
+            sprint_Input = false;
+        } else
+        {
+            sprint_Input = true;
         }
+    }
 
-        playerControls.Enable();
+    public void Attack(InputAction.CallbackContext context)
+    {
+        attack_Input = true;
+    }
+
+    public void HeavyAttack(InputAction.CallbackContext context)
+    {
+        heavyAttack_input = true;
     }
 
     private void OnDisable()
     {
-        playerControls.Disable();
+        //playerControls.Disable();
     }
 
     public void HandleAllInputs()

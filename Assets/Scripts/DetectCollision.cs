@@ -37,7 +37,7 @@ public class DetectCollision : MonoBehaviour
     {
         foreach (ContactPoint contact in collision.contacts)
         {
-            Debug.Log("Contact");
+            //Debug.Log("Contact");
 
             if (contact.otherCollider.gameObject.layer == 3)
             {

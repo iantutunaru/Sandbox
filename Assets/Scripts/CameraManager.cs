@@ -5,11 +5,17 @@ using UnityEngine.Animations;
 
 public class CameraManager : MonoBehaviour
 {
-    InputManager inputManager;
-    public Transform targetTransform;
-    public Transform cameraPivot;
-    public Transform cameraTransform;
-    public LayerMask collisionLayers;
+    [SerializeField]
+    private InputManager inputManager;
+    [SerializeField]
+    private Transform targetTransform;
+    [SerializeField]
+    private Transform cameraPivot;
+    [SerializeField]
+    private Transform cameraTransform;
+    [SerializeField]
+    private LayerMask collisionLayers;
+
     private float defaultPosition;
     private Vector3 cameraFollowVelocity = Vector3.zero;
     private Vector3 cameraVectorPosition;
@@ -28,9 +34,9 @@ public class CameraManager : MonoBehaviour
 
     private void Awake()
     {
-        inputManager = FindObjectOfType<InputManager>();
-        targetTransform = FindObjectOfType<PlayerManager>().transform;
-        cameraTransform = Camera.main.transform;
+        //inputManager = FindObjectOfType<InputManager>();
+        //targetTransform = FindObjectOfType<PlayerManager>().transform;
+        //cameraTransform = Camera.main.transform;
         defaultPosition = cameraTransform.localPosition.z;
     }
 
