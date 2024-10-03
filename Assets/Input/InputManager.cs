@@ -68,14 +68,24 @@ public class InputManager : MonoBehaviour
 
     public void Sprint(InputAction.CallbackContext context)
     {
-        if (sprint_Input)
-        {
-            sprint_Input = false;
-        } else
+        if (context.performed)
         {
             sprint_Input = true;
+        } else if (context.canceled)
+        {
+            sprint_Input = false;
         }
     }
+
+    //public void SprintStart(InputAction.CallbackContext context)
+    //{
+    //    sprint_Input = true;
+    //}
+
+    //public void SprintFinish(InputAction.CallbackContext context)
+    //{
+    //    sprint_Input = false;
+    //}
 
     public void Attack(InputAction.CallbackContext context)
     {

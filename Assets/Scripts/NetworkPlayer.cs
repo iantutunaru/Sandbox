@@ -1,36 +1,31 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
-using UnityEngine.Accessibility;
-using UnityEngine.InputSystem;
-using UnityEngine.Windows;
 
 public class NetworkPlayer : MonoBehaviour
 {
+    // Rigidbody of the player character.
+    [Tooltip("Player is moved by applying force onto this Rigidbody.")]
     [SerializeField]
-    Transform footPosition;
+    private Rigidbody playerRigidbody;
+    // Speed at which the player character is rotated towards the camera direction.
+    [Tooltip("Float variable that controls how fast the player is rotated towards the camera direction.")]
     [SerializeField]
-    Rigidbody playerRigidbody;
-
-    [SerializeField]
-    ConfigurableJoint mainJoint;
-
-    [SerializeField]
-    Animator animator;
-
-    [SerializeField]
-    float rotationSpeed;
-
-    [Header("Movement")]
-    [SerializeField]
-    Transform rigidbodyTransform;
-
+    private float rotationSpeed;
+    // Float used to measure how much time the player spent falling. Higher value increases fall speed.
+    [Tooltip("Timer that starts as soon as player starts falling.")]
     [Header("Falling")]
-    public float inAirTimer;
-    public float leapingVelocity;
-    public float fallingVelocity;
-    public float rayCastHeightOffSet = 0.5f;
+    [SerializeField]
+    private float inAirTimer;
+    // Float that is used to add force to the player when they walk off an edge of a surface.
+    [Tooltip("Force applied to the player when they walk off an edge of a surface.")]
+    [SerializeField]
+    private float leapingVelocity;
+    // Float that is used in the add force method to push the player down when they are falling.
+    [Tooltip("Force applied to the player when they are falling.")]
+    [SerializeField]
+    private float fallingVelocity;
+    // Amount of offset on the starting point from which Ray Cast is made.
+    public float rayCastHeightOffset;
     public LayerMask groundLayer;
     public float maxDistance;
     public float fallingSpeed;
@@ -56,9 +51,6 @@ public class NetworkPlayer : MonoBehaviour
 
     [SerializeField]
     float jumpSpeed;
-
-    //Input
-    Vector2 moveInputVector = Vector2.zero;
     [SerializeField]
     bool isJumpButtonPressed = false;
     [SerializeField]
@@ -68,13 +60,6 @@ public class NetworkPlayer : MonoBehaviour
     [SerializeField]
     float maxSpeed;
 
-    // States
-    //bool isGrounded = false;
-    //bool isAttacking = false;
-
-    // Raycasts
-    RaycastHit[] raycastHits = new RaycastHit[10];
-
     //Syncing of physics objects
     SyncPhysicsObject[] syncPhysicsObjects;
 
@@ -83,15 +68,12 @@ public class NetworkPlayer : MonoBehaviour
 
     public List<Collider> collidingParts = new List<Collider>();
 
-    public PlayerInputActions playerControls;
-    private InputAction move;
-    private InputAction jump;
-    private InputAction lightAttack;
-    private InputAction look;
-
-    InputManager inputManager;
-    AnimatorManager animatorManager;
-    PlayerManager playerManager;
+    [SerializeField]
+    private InputManager inputManager;
+    [SerializeField]
+    private AnimatorManager animatorManager;
+    [SerializeField]
+    private PlayerManager playerManager;
 
     Vector3 moveDirection;
     Vector3 playerVelocity;
@@ -111,48 +93,25 @@ public class NetworkPlayer : MonoBehaviour
     ConfigurableJoint hips;
 
     private ConfigurableJoint[] joints;
-    private ConfigurableJoint[] jointsBackup;
-
     private JointDrive[] jointDriveBackup;
-
-
     bool jumpInProgress = false;
 
     private void Awake()
     {
-        playerManager = GetComponent<PlayerManager>();
-        animatorManager = GetComponent<AnimatorManager>();
-        playerControls = new PlayerInputActions();
         syncPhysicsObjects = GetComponentsInChildren<SyncPhysicsObject>();
-        SetRagdollParts();
         joints = this.gameObject.GetComponentsInChildren<ConfigurableJoint>();
-        jointsBackup = new ConfigurableJoint[joints.Length];
-
-        inputManager = GetComponent<InputManager>();
-        //cameraObject = Camera.main.transform;
-        //playerCollider = GetComponent<Collider>();
+        SetRagdollParts();
     }
 
     public void HandleAllMovement()
     {
         HandleFallingAndLanding();
-
-        //if (playerManager.isInteracting)
-        //{
-        //    return;
-        //}
-
         HandleMovement();
         HandleRotation();
     }
 
     private void HandleMovement()
     {
-        //if (isJumping)
-        //{
-        //    return;
-        //}
-
         moveDirection = cameraObject.forward * inputManager.verticalInput;
         moveDirection = moveDirection + cameraObject.right * inputManager.horizontalInput;
         moveDirection.Normalize();
@@ -181,32 +140,17 @@ public class NetworkPlayer : MonoBehaviour
         {
             jumpInProgress = true; 
             float jumpingVelocity = Mathf.Sqrt(-2 * gravityIntensity * jumpHeight);
-            //Debug.Log("************Jumping y:" + jumpingVelocity);
             moveDirection.y = jumpingVelocity;
-            //playerRigidbody.velocity = moveDirection;
             playerRigidbody.AddForce(moveDirection);
-
-            //return;
         } else
         {
             Vector3 movementVelocity = moveDirection;
-            //Debug.Log("Movement y: " + movementVelocity.y);
-            //playerRigidbody.velocity = movementVelocity;
             playerRigidbody.AddForce(movementVelocity);
         }
-
-        //Vector3 movementVelocity = moveDirection;
-        //Debug.Log("Movement y: " + movementVelocity.y);
-        //playerRigidbody.velocity = movementVelocity;
     }
 
     private void HandleRotation()
     {
-        //if (isJumping) 
-        //{ 
-        //    return; 
-        //}
-
         Vector3 targetDirection = Vector3.zero;
 
         targetDirection = cameraObject.forward * inputManager.verticalInput;
@@ -230,43 +174,32 @@ public class NetworkPlayer : MonoBehaviour
         RaycastHit hit;
         Vector3 rayCastOrigin = transform.position;
         Vector3 targetPosition;
-        rayCastOrigin.y = rayCastOrigin.y + rayCastHeightOffSet;
+        rayCastOrigin.y = rayCastOrigin.y + rayCastHeightOffset;
         targetPosition = transform.position;
 
         if (!isGrounded && !isJumping)
         {
-            //Debug.Log("In air");
             if (!playerManager.isInteracting)
             {
-                //Debug.Log("Falling 1");
                 animatorManager.PlayTargetAnimation("Falling", true);
             }
 
-            //Debug.Log("Falling 2");
             inAirTimer = inAirTimer + Time.deltaTime;
             playerRigidbody.AddForce(transform.forward * leapingVelocity);
-            playerRigidbody.AddForce(-Vector3.up * fallingVelocity * inAirTimer);
+            playerRigidbody.AddForce(Vector3.down * fallingVelocity * inAirTimer);
         }
 
         if (Physics.SphereCast(rayCastOrigin, 0.2f, Vector3.down, out hit, maxDistance, groundLayer))
         {
-            //Debug.Log("Raycast hit");
             if (!isGrounded && playerManager.isInteracting)
             {
-                //animatorManager.animator.StopPlayback();
-                //animatorManager.animator.SetBool("isJumping", false);
-                //isJumping = false;
-                //jumpInProgress = false;
                 animatorManager.PlayTargetAnimation("Landing", true);
             } 
 
             Vector3 rayCastHitPoint = hit.point;
-            //Debug.Log("Raycast y = " + rayCastHitPoint.y);
             targetPosition.y = rayCastHitPoint.y;
             inAirTimer = 0;
             isGrounded = true;
-
-            //playerManager.isInteracting = false;
         }
         else
         {
@@ -276,7 +209,6 @@ public class NetworkPlayer : MonoBehaviour
 
     public void HandleJumping()
     {
-        //Debug.Log("JUMPING");
         if (isGrounded)
         {
             animatorManager.animator.SetBool("isJumping", true);
@@ -285,24 +217,20 @@ public class NetworkPlayer : MonoBehaviour
 
             float jumpingvelocity = Mathf.Sqrt(-2 * gravityIntensity * jumpHeight);
             playerVelocity = moveDirection;
-            //Debug.Log("************jumping y:" + jumpingvelocity);
             playerVelocity.y = jumpingvelocity;
-            //playerrigidbody.velocity = playervelocity;
             playerRigidbody.AddForce(playerVelocity);
         }
     }
 
     public void HandleAttacking()
     {
-        //Debug.Log("ATTACKING");
         isAttacking = true;
-        animatorManager.animator.SetBool("isAttacking", true);
         animatorManager.PlayTargetAnimation("Attack", false);
+        animatorManager.animator.SetBool("isAttacking", true);
     }
 
     public void HandleHeavyAttacking()
     {
-        //Debug.Log("HEAVY ATTACK");
         isHeavyAttacking = true;
         animatorManager.animator.SetBool("isHeavyAttacking", true);
         animatorManager.PlayTargetAnimation("HeavyAttack", false);
@@ -314,12 +242,6 @@ public class NetworkPlayer : MonoBehaviour
     }
 
     private void OnDisable()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
     {
 
     }
@@ -370,24 +292,15 @@ public class NetworkPlayer : MonoBehaviour
     public void Death()
     {
         jointDriveBackup = new JointDrive[joints.Length];
-        //joints.CopyTo(jointsBackup, 0);
 
         for (int i = 0; i < joints.Length; i++)
         {
             Debug.Log("Saving joint " + i);
-            
-
-            //jointsBackup[i] = joints[i];
-           
-            //jointsBackup[i].slerpDrive = joints[i].slerpDrive;
-            //Debug.Log("Saved joint slerp drive: " + jointsBackup[i].slerpDrive.positionSpring);
         }
 
         JointDrive newDrive = new JointDrive();
         newDrive.positionSpring = 0;
 
-        //hips.xMotion = ConfigurableJointMotion.Free;
-        //hips.yMotion = ConfigurableJointMotion.Free;
         hips.zMotion = ConfigurableJointMotion.Free;
 
         for (int i = 0; i < joints.Length; i++)
@@ -395,28 +308,15 @@ public class NetworkPlayer : MonoBehaviour
             jointDriveBackup[i] = joints[i].slerpDrive;
             joints[i].slerpDrive = newDrive;
         }
-
-        for (int i = 0; i < joints.Length; i++)
-        {
-            Debug.Log("II. Saving joint " + i);
-            //Debug.Log("II. Saved joint slerp drive: " + jointsBackup[i].slerpDrive.positionSpring);
-        }
     }
 
     public void Respawn()
     {
-        //jointsBackup.CopyTo(joints, 0);
         hips.zMotion = ConfigurableJointMotion.Locked;
         for (int i = 0; i < joints.Length; i++)
         {
             joints[i].slerpDrive = jointDriveBackup[i];
             Debug.Log("III. Loading joint " + i);
-            //joints[i] = jointsBackup[i];
-            //Debug.Log("III. Loaded joint backup slerp drive: " + jointsBackup[i].slerpDrive.positionSpring);
-            //joints[i].slerpDrive = jointsBackup[i].slerpDrive;
-            //Debug.Log("III. Loaded joint slerp drive: " + joints[i].slerpDrive.positionSpring);
         }
-
-        Debug.Log("Respawned");
     }
 }

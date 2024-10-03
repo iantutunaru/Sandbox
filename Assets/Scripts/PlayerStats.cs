@@ -6,7 +6,7 @@ public class PlayerStats : MonoBehaviour
 {
     [SerializeField]
     private float health = 1000;
-    private float startHealth = 1000;
+    private float maxHealth = 1000;
     private string head = "head";
     private string arm = "arm";
     private string leg = "leg";
@@ -28,11 +28,14 @@ public class PlayerStats : MonoBehaviour
 
     private bool isDead = false;
 
+    [SerializeField]
+    private HealthBar healthBar;
+
 
     // Start is called before the first frame update
     void Start()
     {
-
+        healthBar.SetMaxHealth((int)maxHealth);
     }
 
     // Update is called once per frame
@@ -60,12 +63,15 @@ public class PlayerStats : MonoBehaviour
         if (damagedBodyPart == head)
         {
             health -= damage + headDamage;
+            healthBar.SetHealth((int)health);
         } else if (damagedBodyPart == arm || damagedBodyPart == leg) 
         {
             health -= damage + limbDamage;
+            healthBar.SetHealth((int)health);
         } else
         {
             health -= damage + bodyDamage;
+            healthBar.SetHealth((int)health);
         }
     }
 
@@ -80,7 +86,8 @@ public class PlayerStats : MonoBehaviour
     {
         isDead = false;
         playerManager.isDead = false;
-        health = startHealth;
+        health = maxHealth;
+        healthBar.SetHealth((int)health);
         player.Respawn();
     }
 }
