@@ -301,14 +301,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inputManager: {fileID: 3306198509110133658}
   targetTransform: {fileID: 1353231055933590937}
-  cameraPivot: {fileID: 9159114396420687812}
   cameraTransform: {fileID: 2190298827199351106}
+  cameraPivot: {fileID: 9159114396420687812}
+  cameraCollisionOffSet: 0.2
+  minimumCollisionOffSet: 0.2
+  cameraCollisionRadius: 2
   collisionLayers:
     serializedVersion: 2
     m_Bits: 9
-  cameraCollisionOffSet: 0.2
-  minimumCollsionOffSet: 0.2
-  cameraCollisionRadius: 2
   cameraFollowSpeed: 0.2
   cameraLookSpeed: 2
   cameraPivotSpeed: 2
@@ -672,8 +672,8 @@ GameObject:
   - component: {fileID: 6849054661060876530}
   - component: {fileID: 616944907294367378}
   - component: {fileID: 7432430346049915867}
+  - component: {fileID: 4773061851599298647}
   - component: {fileID: 1511666501012547695}
-  - component: {fileID: 2791603365203602983}
   - component: {fileID: 1738915541811444611}
   - component: {fileID: 1460637965836689668}
   - component: {fileID: 3306198509110133658}
@@ -859,6 +859,44 @@ ConfigurableJoint:
   m_EnablePreprocessing: 1
   m_MassScale: 1
   m_ConnectedMassScale: 1
+--- !u!114 &4773061851599298647
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7588202014458868023}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37caa8ef4b2c14b4db09f5a814cdc459, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerRigidbody: {fileID: 6849054661060876530}
+  cameraObject: {fileID: 2190298827199351106}
+  mainHoldingBone: {fileID: 6819962180238060125}
+  inAirTimer: 0
+  leapingVelocity: 10
+  fallingVelocity: 200
+  rayCastHeightOffset: 0.9
+  maxDistance: 0.9
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 1
+  isSprinting: 0
+  isGrounded: 0
+  isJumping: 0
+  isAttacking: 0
+  isHeavyAttacking: 0
+  walkingSpeed: 100
+  runningSpeed: 150
+  sprintingSpeed: 200
+  rotationSpeed: 10
+  fallingSpeed: 50
+  jumpHeight: 100
+  gravityIntensity: -15
+  inputManager: {fileID: 3306198509110133658}
+  animatorManager: {fileID: 1460637965836689668}
+  playerManager: {fileID: 1738915541811444611}
 --- !u!114 &1511666501012547695
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -877,54 +915,6 @@ MonoBehaviour:
   - {fileID: 7991367877766279639}
   - {fileID: 8583487539255289716}
   - {fileID: 1959040932779239844}
---- !u!114 &2791603365203602983
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7588202014458868023}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 37caa8ef4b2c14b4db09f5a814cdc459, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerRigidbody: {fileID: 6849054661060876530}
-  rotationSpeed: 7
-  inAirTimer: 0
-  leapingVelocity: 3
-  fallingVelocity: 70
-  rayCastHeightOffset: 0.9
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 1
-  maxDistance: 0.9
-  fallingSpeed: 3
-  isSprinting: 0
-  isGrounded: 0
-  isJumping: 0
-  isAttacking: 0
-  isHeavyAttacking: 0
-  walkingSpeed: 1.5
-  runningSpeed: 150
-  sprintingSpeed: 200
-  jumpHeight: 100
-  gravityIntensity: -500
-  jumpSpeed: 75
-  isJumpButtonPressed: 0
-  isAttackButtonPressed: 0
-  maxSpeed: 6
-  ragdollParts: []
-  collidingParts: []
-  inputManager: {fileID: 3306198509110133658}
-  animatorManager: {fileID: 1460637965836689668}
-  playerManager: {fileID: 1738915541811444611}
-  cameraObject: {fileID: 2190298827199351106}
-  animatedAvatarTransform: {fileID: 453186122995754532}
-  physicsAvatarTransform: {fileID: 9045211627307925848}
-  playerCollider: {fileID: 616944907294367378}
-  cam: {fileID: 1905426870801621731}
-  hips: {fileID: 6819962180238060125}
 --- !u!114 &1738915541811444611
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -938,6 +928,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 5634455173654950553}
+  playerLocomotion: {fileID: 4773061851599298647}
+  inputManager: {fileID: 3306198509110133658}
   cameraManager: {fileID: 2908320025892593500}
   isInteracting: 0
   isDead: 0
@@ -966,6 +958,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c1d222a5197ab5428c1c9117fccb38c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerLocomotion: {fileID: 4773061851599298647}
+  animatorManager: {fileID: 1460637965836689668}
   movementInput: {x: 0, y: 0}
   cameraInput: {x: 0, y: 0}
   cameraInputX: 0
@@ -990,13 +984,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 1000
+  maxHealth: 1000
+  head: head
+  arm: arm
+  leg: leg
   headDamage: 20
   bodyDamage: 10
   limbDamage: 5
-  playerManager: {fileID: 1738915541811444611}
-  player: {fileID: 2791603365203602983}
   timer: 0
   waitingTime: 10
+  isDead: 0
+  playerManager: {fileID: 1738915541811444611}
+  player: {fileID: 4773061851599298647}
   healthBar: {fileID: 8815961225474927108}
 --- !u!114 &7054923066241655762
 MonoBehaviour:
@@ -1011,8 +1010,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bodyPart: leg
-  player: {fileID: 2791603365203602983}
-  playerStats: {fileID: 5892074697448483973}
+  player: {fileID: 4773061851599298647}
+  normalAttack: 10
+  heavyAttack: 20
+  playerLayerInt: 3
 --- !u!114 &-2297422955236730083
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2934,11 +2935,6 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 5895376701931760795}
   m_SourcePrefab: {fileID: 100100000, guid: 3c5b1db0b16674f40a46b5819998a15f, type: 3}
---- !u!4 &9045211627307925848 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 4863245293448430, guid: 3c5b1db0b16674f40a46b5819998a15f, type: 3}
-  m_PrefabInstance: {fileID: 9049503057561775542}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &9047735106117765180 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1768229416265098, guid: 3c5b1db0b16674f40a46b5819998a15f, type: 3}
@@ -3109,6 +3105,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animatedRigidbody3D: {fileID: 8402917222973290413}
+  joint: {fileID: 1280553837253042151}
   syncAnimation: 1
 --- !u!114 &6260810103341393026
 MonoBehaviour:
@@ -3123,8 +3120,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bodyPart: arm
-  player: {fileID: 2791603365203602983}
-  playerStats: {fileID: 5892074697448483973}
+  player: {fileID: 4773061851599298647}
+  normalAttack: 10
+  heavyAttack: 20
+  playerLayerInt: 3
 --- !u!1 &9047931656148938022 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1969167863578768, guid: 3c5b1db0b16674f40a46b5819998a15f, type: 3}
@@ -3295,6 +3294,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animatedRigidbody3D: {fileID: 5550472089999669567}
+  joint: {fileID: 4732562610445062636}
   syncAnimation: 1
 --- !u!114 &3123643870589345274
 MonoBehaviour:
@@ -3309,8 +3309,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bodyPart: arm
-  player: {fileID: 2791603365203602983}
-  playerStats: {fileID: 5892074697448483973}
+  player: {fileID: 4773061851599298647}
+  normalAttack: 10
+  heavyAttack: 20
+  playerLayerInt: 3
 --- !u!1 &9047945798000078718 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1840403268469448, guid: 3c5b1db0b16674f40a46b5819998a15f, type: 3}
@@ -3479,6 +3481,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animatedRigidbody3D: {fileID: 3612713022202519095}
+  joint: {fileID: 8316780955149753627}
   syncAnimation: 0
 --- !u!114 &431734212507914715
 MonoBehaviour:
@@ -3493,8 +3496,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bodyPart: body
-  player: {fileID: 2791603365203602983}
-  playerStats: {fileID: 5892074697448483973}
+  player: {fileID: 4773061851599298647}
+  normalAttack: 10
+  heavyAttack: 20
+  playerLayerInt: 3
 --- !u!1 &9047966184833887478 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1862964361740608, guid: 3c5b1db0b16674f40a46b5819998a15f, type: 3}
@@ -3665,6 +3670,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animatedRigidbody3D: {fileID: 7036743246520689637}
+  joint: {fileID: 8632349550950757390}
   syncAnimation: 1
 --- !u!114 &61087759284407983
 MonoBehaviour:
@@ -3679,8 +3685,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bodyPart: arm
-  player: {fileID: 2791603365203602983}
-  playerStats: {fileID: 5892074697448483973}
+  player: {fileID: 4773061851599298647}
+  normalAttack: 10
+  heavyAttack: 20
+  playerLayerInt: 3
 --- !u!1 &9048010063175360602 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1889113053449708, guid: 3c5b1db0b16674f40a46b5819998a15f, type: 3}
@@ -3851,6 +3859,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animatedRigidbody3D: {fileID: 5753078696627624018}
+  joint: {fileID: 7944119771017728611}
   syncAnimation: 1
 --- !u!114 &1001232976455629699
 MonoBehaviour:
@@ -3865,8 +3874,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bodyPart: leg
-  player: {fileID: 2791603365203602983}
-  playerStats: {fileID: 5892074697448483973}
+  player: {fileID: 4773061851599298647}
+  normalAttack: 10
+  heavyAttack: 20
+  playerLayerInt: 3
 --- !u!1 &9048302805634916036 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1209890505618290, guid: 3c5b1db0b16674f40a46b5819998a15f, type: 3}
@@ -4035,6 +4046,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animatedRigidbody3D: {fileID: 3098502074383125603}
+  joint: {fileID: 6819962180238060125}
   syncAnimation: 0
 --- !u!114 &4920136208786058695
 MonoBehaviour:
@@ -4049,8 +4061,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bodyPart: body
-  player: {fileID: 2791603365203602983}
-  playerStats: {fileID: 5892074697448483973}
+  player: {fileID: 4773061851599298647}
+  normalAttack: 10
+  heavyAttack: 20
+  playerLayerInt: 3
 --- !u!1 &9048367708895528100 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1136242424195346, guid: 3c5b1db0b16674f40a46b5819998a15f, type: 3}
@@ -4219,6 +4233,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animatedRigidbody3D: {fileID: 3538268404688786299}
+  joint: {fileID: 2360356897732365135}
   syncAnimation: 0
 --- !u!114 &8642997327827260548
 MonoBehaviour:
@@ -4233,8 +4248,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bodyPart: head
-  player: {fileID: 2791603365203602983}
-  playerStats: {fileID: 5892074697448483973}
+  player: {fileID: 4773061851599298647}
+  normalAttack: 10
+  heavyAttack: 20
+  playerLayerInt: 3
 --- !u!1 &9048370124368620952 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1143104219922478, guid: 3c5b1db0b16674f40a46b5819998a15f, type: 3}
@@ -4405,6 +4422,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animatedRigidbody3D: {fileID: 5344594036887196450}
+  joint: {fileID: 2159196172785318888}
   syncAnimation: 1
 --- !u!114 &5650923204250677672
 MonoBehaviour:
@@ -4419,8 +4437,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bodyPart: arm
-  player: {fileID: 2791603365203602983}
-  playerStats: {fileID: 5892074697448483973}
+  player: {fileID: 4773061851599298647}
+  normalAttack: 10
+  heavyAttack: 20
+  playerLayerInt: 3
 --- !u!1 &9048379254121946406 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1134594551459984, guid: 3c5b1db0b16674f40a46b5819998a15f, type: 3}
@@ -4591,6 +4611,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animatedRigidbody3D: {fileID: 5157347568949390357}
+  joint: {fileID: 2891852487743466980}
   syncAnimation: 1
 --- !u!114 &4811059870986255495
 MonoBehaviour:
@@ -4605,8 +4626,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bodyPart: arm
-  player: {fileID: 2791603365203602983}
-  playerStats: {fileID: 5892074697448483973}
+  player: {fileID: 4773061851599298647}
+  normalAttack: 10
+  heavyAttack: 20
+  playerLayerInt: 3
 --- !u!1 &9048490808935278952 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1400118540403934, guid: 3c5b1db0b16674f40a46b5819998a15f, type: 3}
@@ -4777,6 +4800,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animatedRigidbody3D: {fileID: 9122490002858639239}
+  joint: {fileID: 7057477638040731685}
   syncAnimation: 1
 --- !u!114 &8932647729962941435
 MonoBehaviour:
@@ -4791,8 +4815,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bodyPart: leg
-  player: {fileID: 2791603365203602983}
-  playerStats: {fileID: 5892074697448483973}
+  player: {fileID: 4773061851599298647}
+  normalAttack: 10
+  heavyAttack: 20
+  playerLayerInt: 3
 --- !u!1 &9048668774150975786 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1441851772492956, guid: 3c5b1db0b16674f40a46b5819998a15f, type: 3}
@@ -4963,6 +4989,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animatedRigidbody3D: {fileID: 3125448054455879472}
+  joint: {fileID: 3474779966893975748}
   syncAnimation: 1
 --- !u!114 &4534003292267729193
 MonoBehaviour:
@@ -4977,8 +5004,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bodyPart: leg
-  player: {fileID: 2791603365203602983}
-  playerStats: {fileID: 5892074697448483973}
+  player: {fileID: 4773061851599298647}
+  normalAttack: 10
+  heavyAttack: 20
+  playerLayerInt: 3
 --- !u!1 &9048851547239433704 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1602674322876510, guid: 3c5b1db0b16674f40a46b5819998a15f, type: 3}
@@ -5149,6 +5178,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animatedRigidbody3D: {fileID: 1293638879404444245}
+  joint: {fileID: 856063141865479349}
   syncAnimation: 1
 --- !u!114 &5895376701931760795
 MonoBehaviour:
@@ -5163,8 +5193,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bodyPart: leg
-  player: {fileID: 2791603365203602983}
-  playerStats: {fileID: 5892074697448483973}
+  player: {fileID: 4773061851599298647}
+  normalAttack: 10
+  heavyAttack: 20
+  playerLayerInt: 3
 --- !u!1 &9049410427515807986 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1053070767965508, guid: 3c5b1db0b16674f40a46b5819998a15f, type: 3}
@@ -5335,6 +5367,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animatedRigidbody3D: {fileID: 8107807867737143698}
+  joint: {fileID: 2272295806109922893}
   syncAnimation: 1
 --- !u!114 &4443188466160746872
 MonoBehaviour:
@@ -5349,8 +5382,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bodyPart: arm
-  player: {fileID: 2791603365203602983}
-  playerStats: {fileID: 5892074697448483973}
+  player: {fileID: 4773061851599298647}
+  normalAttack: 10
+  heavyAttack: 20
+  playerLayerInt: 3
 --- !u!4 &9050510566261399742 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4385389949865224, guid: 3c5b1db0b16674f40a46b5819998a15f, type: 3}
