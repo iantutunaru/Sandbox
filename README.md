@@ -1,5 +1,8 @@
-![Logo](./Assets/Icon/Icon_small.png?raw=true)
-# Sandbox
+<p align="center">
+     <img src="./Assets/Icon/Icon_small.png">
+</p>
+
+#      Sandbox
 ## "Flow like sand and box... like a boxer!"
 
 Welcome to **Sandbox**, a Unity project focused on player movement, interaction, and combat mechanics. 
@@ -39,5 +42,5 @@ Your contributions are welcome! Please feel free to submit pull requests or open
 
 ## References
   - [Starter Assets: Character Controllers | URP](https://assetstore.unity.com/packages/essentials/starter-assets-character-controllers-urp-267961?srsltid=AfmBOorIRbQxpIgeugMWwn579AOXt710GpmXXMskVYN0r4gZCVaKG75M) - Animator base, idle animation and avatar configuration.
-  - [POLYGON - Office Pack](https://syntystore.com/products/polygon-office-pack?srsltid=AfmBOop6Qzh26eVqE9uMoD0jaZ-oTSOHeVxC49F_zJaSzAXP3zjr2Hf0) - player character and environment.
-  - [Mixamo](https://www.mixamo.com/#/) - animations.
+  - [POLYGON - Office Pack](https://syntystore.com/products/polygon-office-pack?srsltid=AfmBOop6Qzh26eVqE9uMoD0jaZ-oTSOHeVxC49F_zJaSzAXP3zjr2Hf0) - Player character and environment.
+  - [Mixamo](https://www.mixamo.com/#/) - Animations.
