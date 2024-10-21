@@ -39,15 +39,13 @@ However, it became more, with the potential to be a Unity project focused on pla
 ### Screenshot 1 - Player character and environment
 <p align="center">
      <img src="./Assets/Screenshots/v0.2_/Screen1.PNG">
-
      Displayed are the player character, office environment, and health bar UI.
 </p>
 ### Screenshot 2 - Player movement - running
 <p align="center">
      <img src="./Assets/Screenshots/v0.2_/Screen2.PNG">
+     The player character runs in the office environment.
 </p>
-The player character runs in the office environment.
-
 ### Screenshot 3 - Player movement - jumping
 <p align="center">
      <img src="./Assets/Screenshots/v0.2_/Screen3.PNG">
