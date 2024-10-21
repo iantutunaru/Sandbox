@@ -34,6 +34,45 @@ However, it became more, with the potential to be a Unity project focused on pla
    - Configurable joints and physical syncing for active ragdoll mechanics.
    - Physics-based interactions using Unity's `ConfigurableJoint` system to manage player and object movement.
 
+## Screenshots
+### v0.2.1.x.
+
+### Screenshot 1 - Player character and environment
+<p align="center">
+     <img src="./Assets/Screenshots/v0.2_/Screen1.png">
+</p>
+Displayed are the player character, office environment, and health bar UI.
+
+### Screenshot 2 - Player movement - running
+<p align="center">
+     <img src="./Assets/Screenshots/v0.2_/Screen2.png">
+</p>
+The player character runs in the office environment.
+
+### Screenshot 3 - Player movement - jumping
+<p align="center">
+     <img src="./Assets/Screenshots/v0.2_/Screen3.png">
+</p>
+The player character jumps in the office environment.
+
+### Screenshot 4 - Local split-screen multiplayer
+<p align="center">
+     <img src="./Assets/Screenshots/v0.2_/Screen4.png">
+</p>
+Two players looking at each other.
+
+### Screenshot 5 - Local split-screen multiplayer - fighting
+<p align="center">
+     <img src="./Assets/Screenshots/v0.2_/Screen5.png">
+</p>
+Two players attacking each other. Player 1 is using a normal attack - a series of punches. Player 2 is using a heavy attack - standing karate crane kick.
+
+### Screenshot 6 - Local split-screen multiplayer - death
+<p align="center">
+     <img src="./Assets/Screenshots/v0.2_/Screen6.png">
+</p>
+Player 1 lost the battle and is currently dead. They will respawn in 10 seconds and stand back up.
+
 ## Setup Instructions
 **Environment Setup:** Ensure your Unity project is set up with the latest version of Unity. Import all necessary Unity packages and ensure your project settings are configured for a 3D game environment.
 
@@ -45,3 +84,7 @@ Your contributions are welcome! Please feel free to submit pull requests or open
   - [POLYGON - Office Pack](https://syntystore.com/products/polygon-office-pack?srsltid=AfmBOop6Qzh26eVqE9uMoD0jaZ-oTSOHeVxC49F_zJaSzAXP3zjr2Hf0) - Player character and environment.
   - [Mixamo](https://www.mixamo.com/#/) - Animations.
   - [ChatGPT](https://openai.com/index/chatgpt/) - Logo creation.
+
+## NOTE: Currently there are more comments than required:
+     - If the project is picked up by someone unfamiliar with Unity or some of its aspects, the comments should help them get working faster. 
+     - In the future, the number of comments will be reduced when the project is near the final version.
