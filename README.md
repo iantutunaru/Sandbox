@@ -1,4 +1,4 @@
-[Logo](Assets/Icon/Icon.png)
+[Logo](Assets/Icon/Icon.png?raw=true)
 # Sandbox
 ## "Flow like sand and box... like a boxer!"
 
@@ -38,6 +38,6 @@ However, it became more, with the potential to be a Unity project focused on pla
 Your contributions are welcome! Please feel free to submit pull requests or open issues to discuss potential improvements or fixes.
 
 ## References
-  - [Starter Assets: Character Controllers | URP](https://assetstore.unity.com/packages/essentials/starter-assets-character-controllers-urp-267961?srsltid=AfmBOorIRbQxpIgeugMWwn579AOXt710GpmXXMskVYN0r4gZCVaKG75M)
-  - [POLYGON - Office Pack](https://syntystore.com/products/polygon-office-pack?srsltid=AfmBOop6Qzh26eVqE9uMoD0jaZ-oTSOHeVxC49F_zJaSzAXP3zjr2Hf0)
-  - [Mixamo](https://www.mixamo.com/#/)
+  - [Starter Assets: Character Controllers | URP](https://assetstore.unity.com/packages/essentials/starter-assets-character-controllers-urp-267961?srsltid=AfmBOorIRbQxpIgeugMWwn579AOXt710GpmXXMskVYN0r4gZCVaKG75M) - Animator base, idle animation and avatar configuration.
+  - [POLYGON - Office Pack](https://syntystore.com/products/polygon-office-pack?srsltid=AfmBOop6Qzh26eVqE9uMoD0jaZ-oTSOHeVxC49F_zJaSzAXP3zjr2Hf0) - player character and environment.
+  - [Mixamo](https://www.mixamo.com/#/) - animations.
