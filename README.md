@@ -3,7 +3,7 @@
 </p>
 
 #      Sandbox
-## "Flow like sand and box... like a boxer!"
+## "Flow like the sand and box... like a boxer!"
 
 Welcome to **Sandbox**, a Unity project focused on player movement, interaction, and combat mechanics. 
 This project started with the single goal of researching how to implement an active ragdoll movement system similar to those found in projects like [Gang Beasts](https://store.steampowered.com/app/285900/Gang_Beasts/) or [Party Animals](https://store.steampowered.com/app/1260320/Party_Animals/).
