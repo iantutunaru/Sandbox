@@ -41,26 +41,31 @@ However, it became more, with the potential to be a Unity project focused on pla
      <img src="./Assets/Screenshots/v0.2_/Screen1.PNG">
      Displayed are the player character, office environment, and health bar UI.
 </p>
+
 ### Screenshot 2 - Player movement - running
 <p align="center">
      <img src="./Assets/Screenshots/v0.2_/Screen2.PNG">
      The player character runs in the office environment.
 </p>
+
 ### Screenshot 3 - Player movement - jumping
 <p align="center">
      <img src="./Assets/Screenshots/v0.2_/Screen3.PNG">
      The player character jumps in the office environment.
 </p>
+
 ### Screenshot 4 - Local split-screen multiplayer
 <p align="center">
      <img src="./Assets/Screenshots/v0.2_/Screen4.PNG">
      Two players looking at each other.
 </p>
+
 ### Screenshot 5 - Local split-screen multiplayer - fighting
 <p align="center">
      <img src="./Assets/Screenshots/v0.2_/Screen5.PNG">
      Two players attacking each other. Player 1 is using a normal attack - a series of punches. Player 2 is using a heavy attack - standing karate crane kick.
 </p>
+
 ### Screenshot 6 - Local split-screen multiplayer - death
 <p align="center">
      <img src="./Assets/Screenshots/v0.2_/Screen6.PNG">
