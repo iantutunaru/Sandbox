@@ -1,4 +1,4 @@
-![Logo](./Assets/Icon/Icon.png?raw=true)
+![Logo](./Assets/Icon/Icon_small.png?raw=true)
 # Sandbox
 ## "Flow like sand and box... like a boxer!"
 
