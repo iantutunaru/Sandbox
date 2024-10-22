@@ -5,7 +5,7 @@
 #      Sandbox
 ## "Flow like the sand and box... like a boxer!"
 
-Welcome to **Sandbox**, a Unity project focused on player movement, interaction, and combat mechanics. 
+Welcome to **Sandbox**!
 This project started with the single goal of researching how to implement an active ragdoll movement system similar to those found in projects like [Gang Beasts](https://store.steampowered.com/app/285900/Gang_Beasts/) or [Party Animals](https://store.steampowered.com/app/1260320/Party_Animals/).
 However, it became more, with the potential to be a Unity project focused on player movement, interaction, and combat mechanics. This project serves as a robust foundation for creating complex gameplay involving player stats, camera control, animations, and physical interactions between game objects.
 
@@ -84,6 +84,6 @@ Your contributions are welcome! Please feel free to submit pull requests or open
   - [Mixamo](https://www.mixamo.com/#/) - Animations.
   - [ChatGPT](https://openai.com/index/chatgpt/) - Logo creation.
 
-## NOTE: Currently there are more comments than required:
+## NOTE: Currently there are more comments than required
      - If the project is picked up by someone unfamiliar with Unity or some of its aspects, the comments should help them get working faster. 
      - In the future, the number of comments will be reduced when the project is near the final version.
